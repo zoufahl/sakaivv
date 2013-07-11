@@ -1,3 +1,4 @@
+
 var CON = $("div#content");
 
 var sakaikvv = {
@@ -9,22 +10,29 @@ var sakaikvv = {
 
 		/* step 1: fetch courses-div and gather information */
 		coursesNodes = $("div.content_course", CON);
-		courses = {};
-		lastnode = null;
-		groups = 1;		/* courses are arranged in groups (bsc, msc, labs,...) - divs need to be split */
-		groupcourses = [];
+		var coursesCount = coursesNodes.length;
+		previousnode = null;
+		newtable = true;
 
-debugger;
 
 		$.each(coursesNodes, function(index, node) {
-			
-			/* new group when courses are not directly connected (divided by header) */
-			if (lastnode && lastnode.nextSibling !== node) {
-				courses[groups] = groupcourses;
-				groups++;
-				groupcourses = [];
+
+			/* logic about new table-creation and table-insertion */
+			if (previousnode && previousnode.nextSibling !== node) {
+				table.append($("</tbody></table>"));
+				$(previousnode).after(table);
+				newtable = true;
 			}
 
+			/* logic about new table-creation and table-insertion */
+			if (newtable) {
+				table = $("<table><tbody>");
+				header = sakaikvv.tableHeaderRowHtml();
+				table.append(header);
+				newtable = false;
+			}
+
+			/* current node - extracting information */
 			_teachernode = $("div.lower_teacher_box",node);
 			_firstteacher = $("div.lower_teacher",_teachernode)[0];
 
@@ -38,24 +46,47 @@ debugger;
 				type: 			$("div.left_lower__courseType",node).text(),
 				period: 		$("div.left_lower__period",node).text()
 			};
-			groupcourses.push(course);
+			/* building new node */
+			contentrow = sakaikvv.tableContentRowHtml(course);
+			table.append(contentrow);
+
+
+			/* stuff to do for last element */
+			if ((index + 1) == coursesCount) {
+				$(node).after(table);
+			}
+
 
 			/* store information for next iteration */
-			lastnode = node;
+			previousnode = node;
 		});
-		courses[groups] = groupcourses;
-		/* clean up */
-		lastnode = null;
-		course = null;
-		groups = null;
-		groupcourses = null;
+	},
 
-		/* step 2: build table from courses */
+	tableHeaderRowHtml: function() {
+		$htmlNode = $("<tr> \
+			<th style='width: 7%; font-size: 8px'>Nummer</th> \
+			<th style='width: 7%; font-size: 8px'>Typ</th> \
+			<th style='width: 15%; font-size: 8px'>Dozent</th> \
+			<th style='width: 2%; font-size: 8px'></th> \
+			<th style='width: 75%; font-size: 8px'>Titel</th> \
+			</tr>"); 
+		return $htmlNode;
+	},
 
+	tableContentRowHtml: function(course) {
+		if(course) {
+			$tr = $("<tr>");
+			$td = $("<td>", {
+				text: course.name,
+				'colspan': 5
+			}).appendTo($tr);
+			
+			return $tr;
+		}
 	}
 };
 
-
+debugger;
 console.log('content.js');
 sakaikvv.changeHeader();
 sakaikvv.divToTable();
