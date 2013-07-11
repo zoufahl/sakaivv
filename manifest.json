@@ -1,0 +1,23 @@
+	{
+  "name" : "Sakai KVV",
+  "version" : "0.1",
+  "description" : "Revert current lists of courses to old kvv lists",
+  "browser_action": {
+     "default_icon": "icon.png",
+     "default_title": "Make kvv"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["jquery.js"]
+    }
+  ],
+  "manifest_version": 2
+}
