@@ -1,3 +1,11 @@
+// $(".loadCourseInfoButton").click(function(e) {
+// 	console.log($(this).attr('href'));
+// });
+
+
+// $(".loadCourseInfoButton").css({'backgroundColor':'red'}).trigger('click');
+// console.log('triggered');
+
 
 var CON = $("div#content");
 
@@ -14,7 +22,6 @@ var sakaikvv = {
 		previousnode = null;
 		newtable = true;
 
-
 		$.each(coursesNodes, function(index, node) {
 
 			/* logic about new table-creation and table-insertion */
@@ -23,8 +30,6 @@ var sakaikvv = {
 				$(previousnode).after(table);
 				newtable = true;
 			}
-
-			/* logic about new table-creation and table-insertion */
 			if (newtable) {
 				table = $("<table><tbody>");
 				header = sakaikvv.tableHeaderRowHtml();
@@ -36,7 +41,6 @@ var sakaikvv = {
 			_teachernode = $("div.lower_teacher_box",node);
 			_firstteacher = $("div.lower_teacher",_teachernode)[0];
 
-			/* new courseobject */
 			course = {
 				name: 			$("div.left_upper__content",node).text(),
 				lecturer: 		$("div.lower_teacher__name",_firstteacher).text(),
@@ -46,6 +50,14 @@ var sakaikvv = {
 				type: 			$("div.left_lower__courseType",node).text(),
 				period: 		$("div.left_lower__period",node).text()
 			};
+
+			/* simulate click on more information + gather ext. data */
+			if (index < 6) {
+				$(".loadCourseInfoButton", node).trigger('click');
+			}
+
+
+
 			/* building new node */
 			contentrow = sakaikvv.tableContentRowHtml(course);
 			table.append(contentrow);
@@ -56,10 +68,12 @@ var sakaikvv = {
 				$(node).after(table);
 			}
 
-
 			/* store information for next iteration */
 			previousnode = node;
 		});
+
+		/* delete old stuff */
+		$(coursesNodes).remove();
 	},
 
 	tableHeaderRowHtml: function() {
@@ -76,11 +90,24 @@ var sakaikvv = {
 	tableContentRowHtml: function(course) {
 		if(course) {
 			$tr = $("<tr>");
-			$td = $("<td>", {
-				text: course.name,
-				'colspan': 5
-			}).appendTo($tr);
-			
+			$td1 = $("<td>", {
+				text: '',
+				'colspan': 1
+			});
+			$td2 = $("<td>", {
+				text: course.type,
+				'colspan': 1
+			});
+			$td3 = $("<td>", {
+			 	text: course.lecturer,
+			 	'colspan': 2
+			});
+			$td5 = $("<td>", {
+			 	text: course.name,
+			 	'colspan': 1
+			});						
+			$td1.add($td2).add($td3).add($td5).appendTo($tr);
+
 			return $tr;
 		}
 	}
@@ -90,4 +117,3 @@ debugger;
 console.log('content.js');
 sakaikvv.changeHeader();
 sakaikvv.divToTable();
-
