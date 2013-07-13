@@ -1,0 +1,17 @@
+table.semester {
+	font-family: Verdana, Arial, Helvetica, sans-serif;	
+}
+
+table.semester a {
+	text-decoration: none;
+	color: #336699;
+}
+
+table.semester tbody {
+	vertical-align: top;
+}
+
+table.semester th{
+	background-color: #F4F4F4;
+
+}

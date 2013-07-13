@@ -1,15 +1,6 @@
-// $(".loadCourseInfoButton").click(function(e) {
-// 	console.log($(this).attr('href'));
-// });
-
-
-// $(".loadCourseInfoButton").css({'backgroundColor':'red'}).trigger('click');
-// console.log('triggered');
-
-
 var CON = $("div#content");
 
-var sakaikvv = {
+var sakaivv = {
 	changeHeader: function() {
 		$("h2", CON).css({'font-size': '100%'});
 	},
@@ -31,8 +22,8 @@ var sakaikvv = {
 				newtable = true;
 			}
 			if (newtable) {
-				table = $("<table><tbody>");
-				header = sakaikvv.tableHeaderRowHtml();
+				table = $("<table class='semester'><tbody>");
+				header = sakaivv.tableHeaderRowHtml();
 				table.append(header);
 				newtable = false;
 			}
@@ -47,7 +38,7 @@ var sakaikvv = {
 				lecturermail: 	$("div.lower_teacher__mail a",_firstteacher).attr('href'),
 				morelecturer: 	$("div.lower_teacher",_teachernode)[1] != null,
 				ects: 			$("div.left_lower__ects",node).text(),
-				type: 			$("div.left_lower__courseType",node).text(),
+				typeraw: 		$("div.left_lower__courseType",node).text(),
 				period: 		$("div.left_lower__period",node).text()
 			};
 
@@ -59,7 +50,7 @@ var sakaikvv = {
 
 
 			/* building new node */
-			contentrow = sakaikvv.tableContentRowHtml(course);
+			contentrow = sakaivv.tableContentRowHtml(course);
 			table.append(contentrow);
 
 
@@ -94,14 +85,18 @@ var sakaikvv = {
 				text: '',
 				'colspan': 1
 			});
+			
 			$td2 = $("<td>", {
-				text: course.type,
+				text: course.typeraw.replace(/\[[0-9]\]/g,''),
 				'colspan': 1
 			});
+
+			ua = course.morelecturer?' u.a.':'';
 			$td3 = $("<td>", {
-			 	text: course.lecturer,
+			 	html: "<a href='"+course.lecturermail+"'>"+course.lecturer+"</a>"+ua,
 			 	'colspan': 2
 			});
+			
 			$td5 = $("<td>", {
 			 	text: course.name,
 			 	'colspan': 1
@@ -115,5 +110,5 @@ var sakaikvv = {
 
 debugger;
 console.log('content.js');
-sakaikvv.changeHeader();
-sakaikvv.divToTable();
+sakaivv.changeHeader();
+sakaivv.divToTable();

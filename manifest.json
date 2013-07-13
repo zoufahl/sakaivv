@@ -17,6 +17,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
+      "css": ["sakaivv.css"],
       "js": ["jquery.js"]
     }
   ],
