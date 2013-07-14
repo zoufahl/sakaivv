@@ -152,17 +152,22 @@ var sakaivv = {
 		$("tr.course a.more").click(function(event) {
 			event.preventDefault();
 			var node = $(this).parents("tr");
-			$.ajax({
-				url: $(this).attr('href') 
-			}).done(function(htmlData) {
-				data = sakaivv.decomposeAdditionalInfo(htmlData);
-				newdata = sakaivv.tableContentMetaRowHtml(data);
-				node.after(newdata);
 
-				/* node.siblings("a").removeClass("more"); */
-			}).fail(function() {
-				console.log('fail');
-			});
+			if(node.next().hasClass("coursemeta")) {
+				node.next().toggle();
+			} else {
+				$.ajax({
+					url: $(this).attr('href') 
+				}).done(function(htmlData) {
+					data = sakaivv.decomposeAdditionalInfo(htmlData);
+					newdata = sakaivv.tableContentMetaRowHtml(data);
+					node.after(newdata);
+
+					/* node.siblings("a").removeClass("more"); */
+				}).fail(function() {
+					console.log('fail');
+				});
+			}
 		});
 	}
 };
