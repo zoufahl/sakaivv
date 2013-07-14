@@ -1,6 +1,16 @@
 var CON = $("div#content");
+var INIT = false;
 
 var sakaivv = {
+	init: function() {
+		if (!INIT) {
+			this.changeHeader();
+			this.divToTable();
+			this.addClickTrigger();
+			INIT = true;
+		}
+	},
+
 	changeHeader: function() {
 		$("h2", CON).css({'font-size': '100%'});
 	},
@@ -162,8 +172,7 @@ var sakaivv = {
 					data = sakaivv.decomposeAdditionalInfo(htmlData);
 					newdata = sakaivv.tableContentMetaRowHtml(data);
 					node.after(newdata);
-
-					/* node.siblings("a").removeClass("more"); */
+					$(".coursenr", node).text(data.lvnr).css({'color':'#000000'});
 				}).fail(function() {
 					console.log('fail');
 				});
@@ -174,6 +183,4 @@ var sakaivv = {
 
 debugger;
 console.log('content.js');
-sakaivv.changeHeader();
-sakaivv.divToTable();
-sakaivv.addClickTrigger();
+sakaivv.init();

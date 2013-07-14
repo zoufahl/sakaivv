@@ -13,5 +13,8 @@ table.semester tbody {
 
 table.semester th{
 	background-color: #F4F4F4;
+}
 
+table.semester tr.course a.coursenr {
+	color: #BBBBBB;
 }
