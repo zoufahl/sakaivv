@@ -39,15 +39,11 @@ var sakaivv = {
 				morelecturer: 	$("div.lower_teacher",_teachernode)[1] != null,
 				ects: 			$("div.left_lower__ects",node).text(),
 				typeraw: 		$("div.left_lower__courseType",node).text(),
-				period: 		$("div.left_lower__period",node).text()
+				period: 		$("div.left_lower__period",node).text(),
+				metalink: 		$("a.loadCourseInfoButton",node).attr('href'),
+				metaid: 		$("a.loadCourseInfoButton",node).attr('course'),
+				metatype: 		$("a.loadCourseInfoButton",node).attr('type')
 			};
-
-			/* simulate click on more information + gather ext. data */
-			if (index < 6) {
-				$(".loadCourseInfoButton", node).trigger('click');
-			}
-
-
 
 			/* building new node */
 			contentrow = sakaivv.tableContentRowHtml(course);
@@ -78,11 +74,20 @@ var sakaivv = {
 		return $htmlNode;
 	},
 
+	generateMetalink: function(course) {
+		return (course.metalink+".jsp?type="+course.metatype+"&course="+course.metaid);
+	},
+
 	tableContentRowHtml: function(course) {
 		if(course) {
-			$tr = $("<tr>");
+			link = sakaivv.generateMetalink(course);
+
+			$tr = $("<tr>", {
+				'class': 'course'
+			});
+
 			$td1 = $("<td>", {
-				text: '',
+				html: "<a href='"+link+"' class='coursenr more'>(load)</a>",
 				'colspan': 1
 			});
 			
@@ -98,13 +103,146 @@ var sakaivv = {
 			});
 			
 			$td5 = $("<td>", {
-			 	text: course.name,
+			 	html: "<a href='"+link+"' class='coursename more'>"+course.name+"</a>",
 			 	'colspan': 1
 			});						
 			$td1.add($td2).add($td3).add($td5).appendTo($tr);
 
 			return $tr;
 		}
+	},
+
+	decomposeAdditionalInfo: function(htmlData) {
+
+/***
+
+<div class="additional_top border__bottom">
+    <div class="additional_top__lvnr float__left">
+        19501
+    </div>
+    <div class="additional_top__monr float__left border__left border__right">
+        086bA1.1.1
+    </div>
+    <div class="additional_top__sonr">
+        01.10.2013 - 31.03.2014
+    </div>
+</div><!--
+<div class="additional_tutor">
+    <div class="additional_tutor_row border__bottom">
+        <div class="additional_tutor__group">
+            Tutorium 1
+        </div>
+        <div class="additional_tutor__name border__left">
+            Nicolas Lehmann
+            <div class="lower_teacher__mail float__right">
+                <a href=" mailto:mail@nicolaslehmann.de?subject=Tutorium&#160;1" target="_blank"><i class="foundicon-mail"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="additional_tutor_row border__bottom">
+        <div class="additional_tutor__group">
+            Tutorium 1
+        </div>
+        <div class="additional_tutor__name border__left">
+            Nicolas Lehmann
+            <div class="lower_teacher__mail float__right">
+                <a href=" mailto:mail@nicolaslehmann.de?subject=Tutorium&#160;1" target="_blank"><i class="foundicon-mail"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="additional_tutor_row border__bottom">
+        <div class="additional_tutor__group">
+            Tutorium 1
+        </div>
+        <div class="additional_tutor__name border__left">
+            Nicolas Lehmann
+            <div class="lower_teacher__mail float__right">
+                <a href=" mailto:mail@nicolaslehmann.de?subject=Tutorium&#160;1" target="_blank"><i class="foundicon-mail"></i></a>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="additional__shortDescription">
+    <p>
+	<strong>Algorithmen und Programmieren 1 - Funktionale Programmierung</strong></p>
+<p>
+	<span style="font-size: 12px;" >Inhalte:</span></p>
+<p>
+	<span style="font-size: 12px;" >Grundlagen der Berechenbarkeit:&nbsp;</span></p>
+<div>
+	- Lambda-Kalk&uuml;l&nbsp;</div>
+<div>
+	- primitive Rekursion&nbsp;</div>
+<div>
+	- &micro;-Rekursion&nbsp;</div>
+<div>
+	&nbsp;</div>
+<div>
+	Einf&uuml;hrung in die Funktionale Programmierung (Haskell):&nbsp;</div>
+<div>
+	- Syntax (Backus-Naur-Form)&nbsp;</div>
+<div>
+	- primitive Datentypen, Listen, Tupel, Zeichenketten&nbsp;</div>
+<div>
+	- Ausdr&uuml;cke, Funktionsdefinitionen, Rekursion und Iteration&nbsp;</div>
+<div>
+	- Funktionen h&ouml;herer Ordnung, Polymorphie&nbsp;</div>
+<div>
+	- Typsystem, Typherleitung und &ndash;&uuml;berpr&uuml;fung&nbsp;</div>
+<div>
+	- Algebraische und abstrakte Datentypen&nbsp;</div>
+<div>
+	- Ein- und Ausgabe&nbsp;</div>
+<div>
+	- Such- und Sortieralgorithmen&nbsp;</div>
+<div>
+	&nbsp;</div>
+<div>
+	Beweisen von Programmeigenschaften:&nbsp;</div>
+<div>
+	- Termersetzung&nbsp;</div>
+<div>
+	- strukturelle Induktion&nbsp;</div>
+<div>
+	- Terminierung&nbsp;</div>
+<div>
+	&nbsp;</div>
+<div>
+	Implementierung und Programmiertechnik:&nbsp;</div>
+<div>
+	- Auswertungsstrategien f&uuml;r funktionale Programme&nbsp;</div>
+<div>
+	- Modularer Programmentwurf</div>
+<div>
+	&nbsp;</div>
+<div>
+	<strong>Literatur:</strong></div>
+<div>
+	- Simon Thompson: Haskell: The Craft of Functional Programming, Third Edition, Addison-Wesley, 2011.</div>
+<div>
+	- Graham Hutton: Programming in Haskell, Cambridge University Press, 2007</div>
+<div>
+	- Bird, R./Wadler, Ph.: Einf&uuml;hrung in Funktionale Programmierung, Hanser Verlag, 1982.</div>
+<div>
+	- Hans Hermes: Aufz&auml;hlbarkeit, Entscheidbarkeit, Berechenbarkeit, Springer-Verlag, 1978.</div>
+</div>
+
+***/
+
+	},
+
+	addClickTrigger: function() {
+		$("tr.course a.more").click(function(event) {
+			event.preventDefault();
+			$.ajax({
+				url: $(this).attr('href') 
+			}).done(function(htmlData) {
+				data = sakaivv.decomposeAdditionalInfo(htmlData);
+
+			}).fail(function() {
+				console.log('fail');
+			});
+		});
 	}
 };
 
@@ -112,3 +250,4 @@ debugger;
 console.log('content.js');
 sakaivv.changeHeader();
 sakaivv.divToTable();
+sakaivv.addClickTrigger();
