@@ -1,6 +1,6 @@
 	{
   "name" : "Sakai KVV",
-  "version" : "0.2",
+  "version" : "0.3",
   "description" : "Revert current lists of courses to old kvv lists",
   "browser_action": {
      "default_icon": "icon.png",
