@@ -181,6 +181,6 @@ var sakaivv = {
 	}
 };
 
-debugger;
+// debugger;
 console.log('content.js');
 sakaivv.init();
